@@ -25,6 +25,10 @@ export interface InstanceConnectEndpointProps {
    * Security groups of this endpoint
    */
   readonly securityGroup?: ec2.ISecurityGroup[];
+  /**
+   * VPC for Lambda
+   */
+  readonly vpc: ec2.Vpc;
 }
 
 export class InstanceConnectEndpoint extends Construct {
@@ -74,6 +78,14 @@ export class InstanceConnectEndpoint extends Construct {
       actions: ['iam:CreateServiceLinkedRole'],
       resources: ['*'],
     }));
+    role.addToPolicy(new iam.PolicyStatement({
+      actions: ['ec2:DescribeNetworkInterfaces'],
+      resources: ['*'],
+    }));
+    role.addToPolicy(new iam.PolicyStatement({
+      actions: ['ec2:DeleteNetworkInterface'],
+      resources: ['*'],
+    }));
 
     const commonProps = {
       entry: path.join(__dirname, '../lambda.d'),
@@ -82,6 +94,7 @@ export class InstanceConnectEndpoint extends Construct {
       memorySize: 256,
       timeout: Duration.minutes(10),
       role,
+      vpc: props.vpc
     };
 
     const onEventHandler = new lambdaPython.PythonFunction(this, 'onEventHandler', {

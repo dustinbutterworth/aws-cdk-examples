@@ -5,6 +5,7 @@ export enum InstanceSize {
   'XLARGE' = 'xlarge',
   'XLARGE2' = 'xlarge2',
   'XLARGE4' = 'xlarge4',
+  'MICRO' = 'micro'
 }
 export enum CPUTypes {
   'X86' = 'x86',

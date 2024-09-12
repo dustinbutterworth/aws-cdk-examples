@@ -113,11 +113,14 @@ export class ServerResources extends Construct {
       instanceClass = InstanceClass.M7G;
     } else {
       cpuType = AmazonLinuxCpuType.X86_64;
-      instanceClass = InstanceClass.M5;
+      instanceClass = InstanceClass.T2;
     }
 
     // Determine the correct InstanceSize based on the props passed in
     switch (props.instanceSize) {
+      case 'micro':
+        instanceSize = InstanceSize.MICRO;
+        break;
       case 'large':
         instanceSize = InstanceSize.LARGE;
         break;
